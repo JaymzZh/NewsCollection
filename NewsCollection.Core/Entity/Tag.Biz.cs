@@ -72,7 +72,12 @@ namespace NewsCollention.Entity
 
         #region 扩展属性
 
-        /// <summary>根据newId查找</summary>
+
+        #endregion
+
+        #region 扩展查询
+
+        /// <summary>根据tagId查找</summary>
         /// <param name="tagId"></param>
         /// <returns></returns>
         [DataObjectMethod(DataObjectMethodType.Select, false)]
@@ -86,10 +91,19 @@ namespace NewsCollention.Entity
             //return Meta.SingleCache[tagId];
         }
 
-        #endregion
-
-        #region 扩展查询
-
+        /// <summary>根据标签名称查找</summary>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public static Tag FindByName(string tagName)
+        {
+            if (Meta.Count >= 1000)
+                return Find(__.Name, tagName);
+            else // 实体缓存
+                return Meta.Cache.Entities.Find(__.Name, tagName);
+            // 单对象缓存
+            //return Meta.SingleCache[tagName];
+        }
 
         #endregion
 

@@ -107,7 +107,7 @@ namespace NewsCollention.Entity
         /// <param name="authorId"></param>
         /// <returns></returns>
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public Author FindById(int authorId)
+        public static Author FindById(int authorId)
         {
             if (Meta.Count >= 1000)
                 return Find(__.Id, authorId);
@@ -115,6 +115,20 @@ namespace NewsCollention.Entity
                 return Meta.Cache.Entities.Find(__.Id, authorId);
             // 单对象缓存
             //return Meta.SingleCache[authorId];
+        }
+
+        /// <summary>根据作者名称查找</summary>
+        /// <param name="authorName"></param>
+        /// <returns></returns>
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public static Author FindByName(string authorName)
+        {
+            if (Meta.Count >= 1000)
+                return Find(__.Name, authorName);
+            else // 实体缓存
+                return Meta.Cache.Entities.Find(__.Name, authorName);
+            // 单对象缓存
+            //return Meta.SingleCache[authorName];
         }
 
         #endregion

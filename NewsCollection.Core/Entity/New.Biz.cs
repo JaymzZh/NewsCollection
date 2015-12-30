@@ -108,7 +108,7 @@ namespace NewsCollention.Entity
         /// <param name="newId"></param>
         /// <returns></returns>
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public New FindById(int newId)
+        public static New FindById(int newId)
         {
             if (Meta.Count >= 1000)
                 return Find(__.Id, newId);

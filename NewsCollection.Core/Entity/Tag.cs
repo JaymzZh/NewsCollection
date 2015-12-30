@@ -12,6 +12,7 @@ namespace NewsCollention.Entity
     [DataObject]
     [Description("标签")]
     [BindIndex("PK_Tag_Id", true, "Id")]
+    [BindIndex("PK_Tag_Name", false, "Name")]
     [BindTable("Tag", Description = "标签", ConnName = "DefaultConn", DbType = DatabaseType.SqlServer)]
     public partial class Tag : ITag
     {

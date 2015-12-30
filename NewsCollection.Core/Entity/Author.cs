@@ -12,6 +12,7 @@ namespace NewsCollention.Entity
     [DataObject]
     [Description("作者")]
     [BindIndex("PK_Author_Id", true, "Id")]
+    [BindIndex("PK_Author_Name", false, "Name")]
     [BindRelation("Id", true, "New", "AuthorId")]
     [BindTable("Author", Description = "作者", ConnName = "DefaultConn", DbType = DatabaseType.SqlServer)]
     public partial class Author : IAuthor
