@@ -1,4 +1,5 @@
-﻿using XAgent;
+﻿using System;
+using XAgent;
 
 namespace NewsCollection.Service
 {
@@ -49,16 +50,45 @@ namespace NewsCollection.Service
             switch (index)
             {
                 case 0:
-                    
+                    //采集今天的实时数据
+                    CollectToday();
                     break;
                 case 1:
-                    
+                    //采集历史数据
+                    CollectHistory();
                     break;
             }
 
             return false;
         }
-        
+
+        private void CollectToday()
+        {
+            var dateNow = DateTime.Now;
+            Collection.GetDriverNewsByDate(dateNow);
+        }
+
+        private void CollectHistory()
+        {
+            var timeConfig = TimeConfig.Current;
+            var date = timeConfig.DealTime;
+            //目前只采集近10年数据
+            if(date < DateTime.Now.AddYears(-10))
+                return;
+
+            //不采集今天的数据
+            if (date.ToString("yyyy-MM-dd").Equals(DateTime.Now.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase))
+            {
+                date = date.AddDays(-1);
+                timeConfig.DealTime = date;
+                timeConfig.Save();
+            }
+
+            Collection.GetDriverNewsByDate(date);
+            timeConfig.DealTime = date.AddDays(-1);
+            timeConfig.Save();
+        }
+
         /*public override void StartWork()
         {
             //干你想干的事
