@@ -23,6 +23,19 @@ namespace NewsCollection.Service
             set { _dealTime = value; }
         }
 
+        private bool? _isDealt;
+        /// <summary>是否已处理</summary>
+        [DisplayName("是否已处理")]
+        public bool IsDealt
+        {
+            get
+            {
+                if (_isDealt == null) _isDealt = false;
+                return _isDealt.Value;
+            }
+            set { _isDealt = value; }
+        }
+
         #endregion
     }
 }

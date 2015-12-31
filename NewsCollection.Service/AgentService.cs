@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using XAgent;
 
 namespace NewsCollection.Service
@@ -41,6 +42,9 @@ namespace NewsCollection.Service
 
         #region 核心
 
+        readonly Collection _collectToday = new Collection();
+        readonly Collection _collectHistory = new Collection();
+
         /// <summary>核心工作方法。调度线程会定期调用该方法</summary>
         /// <param name="index">线程序号</param>
         /// <returns>是否立即开始下一步工作。某些任务能达到满负荷，线程可以不做等待</returns>
@@ -64,39 +68,66 @@ namespace NewsCollection.Service
 
         private void CollectToday()
         {
+            if (_collectToday.IsDealing)
+                return;
+
             var dateNow = DateTime.Now;
-            Collection.GetDriverNewsByDate(dateNow);
+            _collectToday.GetDriverNewsByDate(dateNow);//不判断是否已完成
         }
 
         private void CollectHistory()
         {
             var timeConfig = TimeConfig.Current;
-            var date = timeConfig.DealTime;
-            //目前只采集近10年数据
-            if(date < DateTime.Now.AddYears(-10))
+            //历史数据不循环采集，只执行一次
+            if (timeConfig.IsDealt)
                 return;
 
-            //不采集今天的数据
-            if (date.ToString("yyyy-MM-dd").Equals(DateTime.Now.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase))
+            timeConfig.IsDealt = true;
+            timeConfig.Save();
+            
+            while (true)
             {
-                date = date.AddDays(-1);
-                timeConfig.DealTime = date;
+                if (_collectHistory.IsDealing)
+                {
+                    //避免还没采集结束
+                    Task.Delay(1000);
+                    continue;
+                }
+
+                var date = timeConfig.DealTime;
+                //目前只采集近10年数据
+                if (date < DateTime.Now.AddYears(-10))
+                    return;
+
+                //不采集今天的数据
+                if (date.ToString("yyyy-MM-dd")
+                    .Equals(DateTime.Now.ToString("yyyy-MM-dd"), StringComparison.OrdinalIgnoreCase))
+                {
+                    date = date.AddDays(-1);
+                    timeConfig.DealTime = date;
+                    timeConfig.Save();
+                }
+
+                _collectHistory.GetDriverNewsByDate(date);
+                timeConfig.DealTime = date.AddDays(-1);
                 timeConfig.Save();
             }
-
-            Collection.GetDriverNewsByDate(date);
-            timeConfig.DealTime = date.AddDays(-1);
-            timeConfig.Save();
         }
 
-        /*public override void StartWork()
+        public override void StartWork()
         {
             //干你想干的事
+            var timeConfig = TimeConfig.Current;
+            if (timeConfig.IsDealt)
+            {
+                timeConfig.IsDealt = false;
+                timeConfig.Save();
+            }
 
             base.StartWork();
         }
 
-        public override void StopWork()
+        /*public override void StopWork()
         {
             //释放一些资源等
 
