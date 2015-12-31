@@ -99,7 +99,7 @@ namespace NewsCollention.Entity
         [NonSerialized]
         private Tag _Tag;
 
-        /// <summary>该新闻标签所对应的新闻</summary>
+        /// <summary>该新闻标签所对应的标签</summary>
         [XmlIgnore]
         public Tag Tag
         {
@@ -122,6 +122,18 @@ namespace NewsCollention.Entity
         #endregion
 
         #region 扩展查询
+
+        /// <summary>根据NewId查找</summary>
+        /// <param name="newid"></param>
+        /// <returns></returns>
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public static EntityList<NewTag> FindByNewId(Int32 newid)
+        {
+            if (Meta.Count >= 1000)
+                return FindAll(__.NewId, newid);
+            else // 实体缓存
+                return Meta.Cache.Entities.FindAll(e => e.NewId == newid);
+        }
 
         /// <summary>根据NewId、TagId查找</summary>
         /// <param name="newid"></param>

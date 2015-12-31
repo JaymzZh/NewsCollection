@@ -1,5 +1,7 @@
 ﻿﻿using System;
+﻿using System.Collections.Generic;
 ﻿using System.ComponentModel;
+﻿using System.Linq;
 ﻿using System.Xml.Serialization;
 ﻿using NewLife.Data;
 using XCode;
@@ -76,7 +78,7 @@ namespace NewsCollention.Entity
         #endregion
 
         #region 扩展属性
-            ﻿
+        
         [NonSerialized]
         private Author _Author;
 
@@ -99,6 +101,29 @@ namespace NewsCollention.Entity
         /// <summary>该新闻所对应的作者名称</summary>
         [XmlIgnore]
         public String AuthorName => Author != null ? Author.Name : String.Empty;
+        
+        [NonSerialized]
+        private IEnumerable<Tag> _Tags;
+
+        /// <summary>该新闻所对应的标签</summary>
+        [XmlIgnore]
+        public IEnumerable<Tag> Tags
+        {
+            get
+            {
+                if (_Tags == null && Id > 0 && !Dirtys.ContainsKey("Tags"))
+                {
+                    _Tags = NewTag.FindByNewId(Id).ToList().Select(p => p.Tag);
+                    Dirtys["Tags"] = true;
+                }
+                return _Tags;
+            }
+            set { _Tags = value; }
+        }
+
+        /// <summary>该新闻所对应的标签名称</summary>
+        [XmlIgnore]
+        public String TagNames => Tags != null && Tags.Count() > 0 ? String.Join(",", Tags.Select(t => t.Name)) : String.Empty;
 
         #endregion
 

@@ -1,4 +1,6 @@
 ﻿using Nancy;
+using NewsCollention.Entity;
+using XCode;
 
 namespace NewsCollection.Web.Modules
 {
@@ -8,7 +10,8 @@ namespace NewsCollection.Web.Modules
         {
             Get["/"] = parameters =>
             {
-                return View["index"];
+                var news = New.FindAll(null, New._.CreateTime.Desc(), null, 0, 100);
+                return View["index", news];
             };
         }
     }

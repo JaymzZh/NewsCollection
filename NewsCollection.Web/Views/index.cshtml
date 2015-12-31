@@ -2,19 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>NewsCollection.Web</title>
-
-	<style type="text/css">
-
-		body {
-			text-align: center;
-		}
-
-	</style>
-
+    <title>Collect News From MyDriver</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .post {
+            padding-top: 10px;
+        }
+    </style>
 </head>
 <body>
-	<img src="~/Content/nancy-logo.png" alt="Nancy logo" /><br />
-	This view was rendered using the Nancy Razor view engine
+    <div id="main" class="wrapper">
+        <div class="container">
+            <section class="posts">
+                @foreach (var @n in @Model)
+                {
+                    <article class="post block">
+                        <div class="content">
+                            <h2 class="t"><a href="@n.Url" target="_blank">@n.Title</a></h2>
+                            <div class="meta">
+                                <time>@n.CreateTime.ToString("D")</time>
+                                <author>@n.AuthorName</author>
+                                <tags>@n.TagNames</tags>
+                            </div>
+                            <hr/>
+                            <div class="entry">
+                                @Html.Raw(@n.Content)
+                            </div>
+                        </div>
+                    </article>
+                }
+            </section>
+        </div>
+    </div>
 </body>
 </html>

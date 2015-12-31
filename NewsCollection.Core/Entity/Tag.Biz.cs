@@ -81,7 +81,7 @@ namespace NewsCollention.Entity
         /// <param name="tagId"></param>
         /// <returns></returns>
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public Tag FindById(int tagId)
+        public static Tag FindById(int tagId)
         {
             if (Meta.Count >= 1000)
                 return Find(__.Id, tagId);

@@ -82,7 +82,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Config\Core.config" />
-    <None Include="Config\TimeConfig.config" />
     <None Include="Config\XAgent.config" />
     <None Include="Config\XCode.config" />
     <None Include="packages.config" />
