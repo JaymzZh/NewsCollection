@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Threading;
 using XAgent;
 
 namespace NewsCollection.Service
@@ -90,7 +90,7 @@ namespace NewsCollection.Service
                 if (_collectHistory.IsDealing)
                 {
                     //避免还没采集结束
-                    Task.Delay(1000);
+                    Thread.Sleep(1200);
                     continue;
                 }
 

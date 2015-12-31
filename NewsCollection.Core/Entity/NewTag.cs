@@ -18,11 +18,23 @@ namespace NewsCollention.Entity
     public partial class NewTag : INewTag
     {
         #region 属性
+        private Int32 _Id;
+        /// <summary></summary>
+        [DisplayName("ID")]
+        [Description("ID")]
+        [DataObjectField(true, true, false, 10)]
+        [BindColumn(1, "Id", "ID", null, "int", 10, 0, false)]
+        public virtual Int32 Id
+        {
+            get { return _Id; }
+            set { if (OnPropertyChanging(__.Id, value)) { _Id = value; OnPropertyChanged(__.Id); } }
+        }
+
         private Int32 _NewId;
         /// <summary></summary>
         [DisplayName("NewId")]
         [Description("NewId")]
-        [DataObjectField(true, false, false, 10)]
+        [DataObjectField(false, false, false, 10)]
         [BindColumn(1, "NewId", "NewId", null, "int", 10, 0, false)]
         public virtual Int32 NewId
         {
@@ -34,7 +46,7 @@ namespace NewsCollention.Entity
         /// <summary></summary>
         [DisplayName("TagId")]
         [Description("TagId")]
-        [DataObjectField(true, false, false, 10)]
+        [DataObjectField(false, false, false, 10)]
         [BindColumn(2, "TagId", "TagId", null, "int", 10, 0, false)]
         public virtual Int32 TagId
         {
@@ -57,6 +69,7 @@ namespace NewsCollention.Entity
             {
                 switch (name)
                 {
+                    case __.Id: return _Id;
                     case __.NewId : return _NewId;
                     case __.TagId : return _TagId;
                     default: return base[name];
@@ -66,6 +79,7 @@ namespace NewsCollention.Entity
             {
                 switch (name)
                 {
+                    case __.Id : _Id = Convert.ToInt32(value); break;
                     case __.NewId : _NewId = Convert.ToInt32(value); break;
                     case __.TagId : _TagId = Convert.ToInt32(value); break;
                     default: base[name] = value; break;
@@ -79,6 +93,9 @@ namespace NewsCollention.Entity
         public partial class _
         {
             ///<summary></summary>
+            public static readonly Field Id = FindByName(__.Id);
+
+            ///<summary></summary>
             public static readonly Field NewId = FindByName(__.NewId);
 
             ///<summary></summary>
@@ -90,6 +107,9 @@ namespace NewsCollention.Entity
         /// <summary>取得NewTag字段名称的快捷方式</summary>
         partial class __
         {
+            ///<summary></summary>
+            public const String Id = "Id";
+
             ///<summary></summary>
             public const String NewId = "NewId";
 
@@ -105,6 +125,9 @@ namespace NewsCollention.Entity
     public partial interface INewTag
     {
         #region 属性
+        /// <summary></summary>
+        Int32 Id { get; set; }
+
         /// <summary></summary>
         Int32 NewId { get; set; }
 

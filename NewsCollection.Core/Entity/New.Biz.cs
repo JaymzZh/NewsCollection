@@ -76,7 +76,7 @@ namespace NewsCollention.Entity
         //}
 
         #endregion
-
+        
         #region 扩展属性
         
         [NonSerialized]
@@ -123,7 +123,7 @@ namespace NewsCollention.Entity
 
         /// <summary>该新闻所对应的标签名称</summary>
         [XmlIgnore]
-        public String TagNames => Tags != null && Tags.Count() > 0 ? String.Join(",", Tags.Select(t => t.Name)) : String.Empty;
+        public String TagNames => Tags != null && Tags.Any() ? String.Join(",", Tags.OrderBy(t => t.Id).Select(t => t.Name)) : String.Empty;
 
         #endregion
 

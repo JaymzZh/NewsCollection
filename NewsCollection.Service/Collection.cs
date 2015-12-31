@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using HtmlAgilityPack;
 using NewsCollention.Entity;
 using ScrapySharp.Extensions;
@@ -64,15 +64,7 @@ namespace NewsCollection.Service
 
                     //查找作者信息
                     var authorNode = a.LastOrDefault();
-                    var authorName = authorNode?.InnerText;
-                    var author = Author.FindByName(authorName); //首先查询数据库里有该作者没，没有则添加
-                    if (author == null)
-                    {
-                        author = new Author {Name = authorName};
-                        var authorUrl = authorNode?.Attributes["href"]?.Value.Trim();
-                        author.Url = authorUrl;
-                        author.Save();
-                    }
+                    var author = AddAuthor(authorNode);
                     @new.AuthorId = author.Id;
 
                     var time = $"{date.Year}-{titleNode?.CssSelect("ul.hui2 > li").LastOrDefault()?.InnerText}";
@@ -82,21 +74,7 @@ namespace NewsCollection.Service
 
                     //查找标签信息
                     var tagsNode = newNode.CssSelect("div.pce_lb2 div.pce_lb2_right1 a");
-                    var tags = new EntityList<Tag>();
-                    foreach (var node in tagsNode)
-                    {
-                        var tagName = node.InnerText.Trim();
-                        var tag = Tag.FindByName(tagName);
-                        if (tag == null)
-                        {
-                            tag = new Tag
-                            {
-                                Name = node.InnerText.Trim(),
-                                Url = node.Attributes["href"]?.Value
-                            };
-                            tags.Add(tag);
-                        }
-                    }
+                    var tags = AddTags(tagsNode);
                     tags.Save();
 
                     @new.Save();
@@ -104,7 +82,7 @@ namespace NewsCollection.Service
                     AddNewTag(@new, tags);
 
                     //延迟一定时间，避免IP被封
-                    Task.Delay(1200);
+                    Thread.Sleep(1200);
                 }
 
                 GoNext(html, date, page);
@@ -113,6 +91,36 @@ namespace NewsCollection.Service
             {
                 IsDealing = false;
             }
+        }
+
+        private static Author AddAuthor(HtmlNode authorNode)
+        {
+            var authorName = authorNode?.InnerText;
+            var author = Author.FindByName(authorName); //首先查询数据库里有该作者没，没有则添加
+            if (author == null)
+            {
+                author = new Author {Name = authorName};
+                var authorUrl = authorNode?.Attributes["href"]?.Value.Trim();
+                author.Url = authorUrl;
+                author.Save();
+            }
+            return author;
+        }
+
+        private static EntityList<Tag> AddTags(IEnumerable<HtmlNode> tagsNode)
+        {
+            var tags = new EntityList<Tag>();
+            foreach (var node in tagsNode)
+            {
+                var tagName = node.InnerText.Trim();
+                var tag = Tag.FindByName(tagName) ?? new Tag
+                {
+                    Name = node.InnerText.Trim(),
+                    Url = node.Attributes["href"]?.Value
+                };
+                tags.Add(tag);
+            }
+            return tags;
         }
 
         private void GoNext(HtmlNode html, DateTime date, int page)
@@ -160,9 +168,8 @@ namespace NewsCollection.Service
                 {
                     var classAttr = node.Attributes["class"];
                     //排除新闻详情下面无用信息（文章纠错、微信）
-                    if (classAttr != null && (classAttr.Value.Equals("jcuo1", StringComparison.OrdinalIgnoreCase)
-                        || classAttr.Value.Equals("news_bq", StringComparison.OrdinalIgnoreCase)))
-                        continue;
+                    if (classAttr != null && classAttr.Value.Equals("jcuo1", StringComparison.OrdinalIgnoreCase))
+                        break;
 
                     content.Append(node.OuterHtml);
                 }
