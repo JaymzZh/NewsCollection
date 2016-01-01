@@ -25,7 +25,11 @@ namespace NewsCollection.Service
                     //载入dll
                     var callingAssembly = Assembly.LoadFrom(file);
                     var implementors = typeof(ICollect).GetInstantiableImplementors(callingAssembly);
-                    plugins.AddRange(implementors.Select(type => (ICollect)Activator.CreateInstance(type)).Where(collect => collect != null));
+                    foreach (var collect in implementors.Select(type => (ICollect) Activator.CreateInstance(type)).Where(collect => collect != null))
+                    {
+                        plugins.Add(collect);
+                        XTrace.WriteLine($"Find Plugin: {file}");
+                    }
                 }
                 catch (Exception ex)
                 {
