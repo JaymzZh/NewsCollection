@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using NewLife.Xml;
 
-namespace NewsCollection.Service
+namespace NewsCollection.Plugin.CollectMyDriverNews
 {
     [DisplayName("历史数据采集时间")]
-    [XmlConfigFile("Config/TimeConfig.config")]
-    public class TimeConfig : XmlConfig<TimeConfig>
+    [XmlConfigFile("Config/MyDriverTimeConfig.config")]
+    public class MyDriverTimeConfig : XmlConfig<MyDriverTimeConfig>
     {
         #region 属性
 

@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsCollection.Core", "News
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsCollection.Service", "NewsCollection.Service\NewsCollection.Service.csproj", "{B339B1ED-20C4-43DE-AE79-0F377335EECD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsCollection.Plugin", "NewsCollection.Plugin\NewsCollection.Plugin.csproj", "{9F0B8C4B-72EE-4B9A-A325-62F4E90FF01B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsCollection.Plugin.CollectMyDriverNews", "NewsCollection.Plugin.CollectMyDriverNews\NewsCollection.Plugin.CollectMyDriverNews.csproj", "{4EEE6A65-D0C1-4D09-82DE-33C5F9C679F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{CB259723-C0F3-4045-9A02-E3075E7E56E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +33,20 @@ Global
 		{B339B1ED-20C4-43DE-AE79-0F377335EECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B339B1ED-20C4-43DE-AE79-0F377335EECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B339B1ED-20C4-43DE-AE79-0F377335EECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F0B8C4B-72EE-4B9A-A325-62F4E90FF01B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F0B8C4B-72EE-4B9A-A325-62F4E90FF01B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F0B8C4B-72EE-4B9A-A325-62F4E90FF01B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F0B8C4B-72EE-4B9A-A325-62F4E90FF01B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EEE6A65-D0C1-4D09-82DE-33C5F9C679F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEE6A65-D0C1-4D09-82DE-33C5F9C679F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEE6A65-D0C1-4D09-82DE-33C5F9C679F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEE6A65-D0C1-4D09-82DE-33C5F9C679F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9F0B8C4B-72EE-4B9A-A325-62F4E90FF01B} = {CB259723-C0F3-4045-9A02-E3075E7E56E8}
+		{4EEE6A65-D0C1-4D09-82DE-33C5F9C679F7} = {CB259723-C0F3-4045-9A02-E3075E7E56E8}
 	EndGlobalSection
 EndGlobal

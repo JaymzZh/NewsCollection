@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA1B60DC-2188-4E91-8301-CD445A91CF8B}</ProjectGuid>
+    <ProjectGuid>{9F0B8C4B-72EE-4B9A-A325-62F4E90FF01B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NewsCollection.Core</RootNamespace>
-    <AssemblyName>NewsCollection.Core</AssemblyName>
+    <RootNamespace>NewsCollection.Plugin</RootNamespace>
+    <AssemblyName>NewsCollection.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,31 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScrapySharp.2.2.63\lib\net40\FSharp.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NewLife.Core">
-      <HintPath>..\DLL\NewLife.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="XCode">
-      <HintPath>..\DLL\XCode.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyHelper.cs" />
-    <Compile Include="Entity\Author.Biz.cs" />
-    <Compile Include="Entity\Author.cs" />
-    <Compile Include="Entity\New.Biz.cs" />
-    <Compile Include="Entity\New.cs" />
-    <Compile Include="Entity\NewTag.Biz.cs" />
-    <Compile Include="Entity\NewTag.cs" />
-    <Compile Include="Entity\Tag.Biz.cs" />
-    <Compile Include="Entity\Tag.cs" />
-    <Compile Include="HtmlHelper.cs" />
+    <Compile Include="ICollect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EA1B60DC-2188-4E91-8301-CD445A91CF8B}</ProjectGuid>
+    <ProjectGuid>{4EEE6A65-D0C1-4D09-82DE-33C5F9C679F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NewsCollection.Core</RootNamespace>
-    <AssemblyName>NewsCollection.Core</AssemblyName>
+    <RootNamespace>NewsCollection.Plugin.CollectMyDriverNews</RootNamespace>
+    <AssemblyName>NewsCollection.Plugin.CollectMyDriverNews</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -35,8 +35,20 @@
       <HintPath>..\packages\ScrapySharp.2.2.63\lib\net40\FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NewLife.Core">
       <HintPath>..\DLL\NewLife.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ScrapySharp, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScrapySharp.2.2.63\lib\net40\ScrapySharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ScrapySharp.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScrapySharp.2.2.63\lib\net40\ScrapySharp.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,17 +58,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyHelper.cs" />
-    <Compile Include="Entity\Author.Biz.cs" />
-    <Compile Include="Entity\Author.cs" />
-    <Compile Include="Entity\New.Biz.cs" />
-    <Compile Include="Entity\New.cs" />
-    <Compile Include="Entity\NewTag.Biz.cs" />
-    <Compile Include="Entity\NewTag.cs" />
-    <Compile Include="Entity\Tag.Biz.cs" />
-    <Compile Include="Entity\Tag.cs" />
-    <Compile Include="HtmlHelper.cs" />
+    <Compile Include="Collect.cs" />
+    <Compile Include="CollectMyDriverNews.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MyDriverTimeConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NewsCollection.Core\NewsCollection.Core.csproj">
+      <Project>{ea1b60dc-2188-4e91-8301-cd445a91cf8b}</Project>
+      <Name>NewsCollection.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NewsCollection.Plugin\NewsCollection.Plugin.csproj">
+      <Project>{9f0b8c4b-72ee-4b9a-a325-62f4e90ff01b}</Project>
+      <Name>NewsCollection.Plugin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

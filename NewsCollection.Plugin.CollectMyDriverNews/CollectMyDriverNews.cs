@@ -9,9 +9,9 @@ using ScrapySharp.Extensions;
 using ScrapySharp.Network;
 using XCode;
 
-namespace NewsCollection.Service
+namespace NewsCollection.Plugin.CollectMyDriverNews
 {
-    public class Collection
+    public class CollectMyDriverNews
     {
         /// <summary>
         /// 用于判断任务结束没
