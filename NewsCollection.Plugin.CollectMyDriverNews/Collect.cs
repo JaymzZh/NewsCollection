@@ -49,7 +49,7 @@ namespace NewsCollection.Plugin.CollectMyDriverNews
                 if (_collectHistory.IsDealing)
                 {
                     //避免还没采集结束
-                    Thread.Sleep(1200);
+                    Thread.Sleep(600);
                     continue;
                 }
 

@@ -82,7 +82,7 @@ namespace NewsCollection.Plugin.CollectMyDriverNews
                     AddNewTag(@new, tags);
 
                     //延迟一定时间，避免IP被封
-                    Thread.Sleep(1200);
+                    Thread.Sleep(600);
                 }
 
                 GoNext(html, date, page);
