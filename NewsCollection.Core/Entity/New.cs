@@ -12,7 +12,7 @@ namespace NewsCollention.Entity
     [DataObject]
     [Description("新闻")]
     [BindIndex("PK_New_Id", true, "Id")]
-    [BindIndex("IX_NewUrl", true, "Url")]
+    [BindIndex("IX_New_Url", false, "Url")]
     [BindIndex("IX_New_AuthorId", false, "AuthorId")]
     [BindRelation("AuthorId", false, "Author", "Id")]
     [BindTable("New", Description = "新闻", ConnName = "DefaultConn", DbType = DatabaseType.SqlServer)]
@@ -59,7 +59,7 @@ namespace NewsCollention.Entity
         /// <summary></summary>
         [DisplayName("Content")]
         [Description("内容")]
-        [DataObjectField(false, false, false, 2147483647)]
+        [DataObjectField(false, false, false, 0)]
         [BindColumn(4, "Content", "内容", null, "text", 0, 0, false)]
         public virtual String Content
         {
