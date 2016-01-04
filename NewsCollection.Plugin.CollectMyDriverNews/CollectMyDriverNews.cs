@@ -189,10 +189,51 @@ namespace NewsCollection.Plugin.CollectMyDriverNews
 
                         content.Append(node.OuterHtml);
                     }
+                    GetNextPageContent(url, html, content);
                 }
             }
 
             return content.ToString();
+        }
+
+        private static void GetNextPageContent(string url, HtmlNode html, StringBuilder content)
+        {
+            var pageNode = html.CssSelect("select[name=Split_Page]").FirstOrDefault();
+            if (pageNode != null)
+            {
+                var baseUrl = url.Substring(0, url.LastIndexOf('/')); //基础网址
+                var currentUrl = url.Substring(url.LastIndexOf('/') + 1); //当前网址（不含基础网址）
+                foreach (var node in pageNode.CssSelect("option"))
+                {
+                    var nextPageUrl = node.Attributes["value"];
+                    if (nextPageUrl != null)
+                    {
+                        if (nextPageUrl.Value.Equals(currentUrl, StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        var uri = new Uri($"{baseUrl}/{nextPageUrl}");
+                        var browser = new ScrapingBrowser {Encoding = Encoding.Default};
+                        var html1 = browser.DownloadString(uri);
+                        var doc = new HtmlDocument();
+                        doc.LoadHtml(html1);
+                        html = doc.DocumentNode;
+                        var htmlNode = html.CssSelect("div.pc_info").FirstOrDefault();
+                        if (htmlNode != null)
+                        {
+                            foreach (var node1 in htmlNode.CssSelect("p"))
+                            {
+                                var classAttr = node1.Attributes["class"];
+                                //排除测评详情下面无用信息（更多、相关阅读）
+                                if (classAttr != null &&
+                                    classAttr.Value.Equals("news_bq", StringComparison.OrdinalIgnoreCase))
+                                    break;
+
+                                content.Append(node1.OuterHtml);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
