@@ -12,7 +12,7 @@
 
 ### 技术栈
 
-- [.NET 4.6.1](https://www.microsoft.com/en-us/download/details.aspx?id=49982) Net framework
+- [.NET 4.6.1](https://www.microsoft.com/en-us/download/details.aspx?id=49982) .Net框架
 - [XCode](http://newlifex.com/) ORM框架
 - [XAgent](http://newlifex.com/) 代理服务
-- [Nancy](http://nancyfx.org/) Web framework
+- [Nancy](http://nancyfx.org/) Web框架
