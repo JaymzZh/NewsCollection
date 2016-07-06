@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NewsCollection.Core
+namespace FindErrorChapter
 {
     public class HtmlHelper
     {
+        private static readonly Regex ContentCharsetRegex = new Regex(
+           @"charset(|\s+)=(|\s+)(?<value>[a-z,0-9,-]+)",
+           RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static readonly List<string> UserAgents = new List<string>
         {
             "Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11",
@@ -25,37 +30,105 @@ namespace NewsCollection.Core
         /// 获得网页源代码
         /// </summary>
         /// <param name="urlStr">网址</param>
-        /// <param name="encoding">网页编码</param>
         /// <param name="method">获取方式（'GET'/'POST'），默认'GET'</param>
         /// <param name="timeout">超时时间，默认50秒</param>
         /// <param name="accept">接收类型</param>
         /// <returns>以字符串形式保存的网页源代码</returns>
-        public static string GetWebSource(string urlStr, Encoding encoding, string method = "GET", int timeout = 50000,
+        public static string GetWebSource(string urlStr, string method = "GET", int timeout = 50000,
             string accept = "*/*")
         {
-            // Set http web address
-            Uri url = new Uri(urlStr);
-
-            // Set Web Request
-            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-            request.Method = method; // (GET/POST)
-            request.Referer = urlStr;
-            request.Timeout = timeout; // Timeout(ms)
-            request.Accept = accept; // All Types
-            request.UserAgent = UserAgents[new Random().Next(UserAgents.Count)];
-            request.CookieContainer = new CookieContainer(); // Cookies
-
-            string respHtml;
-            // Create HttpWebResponse Object
-            using (HttpWebResponse resp = request.GetResponse() as HttpWebResponse)
+            try
             {
-                StreamReader reader = new StreamReader(
-                    resp.GetResponseStream(),
-                    encoding);
-                respHtml = reader.ReadToEnd();
+                // Set http web address
+                Uri url = new Uri(urlStr);
+
+                // Set Web Request
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                request.Method = method; // (GET/POST)
+                request.Referer = urlStr;
+                request.Timeout = timeout; // Timeout(ms)
+                request.Accept = accept; // All Types
+                request.UserAgent = UserAgents[new Random().Next(UserAgents.Count)];
+                request.CookieContainer = new CookieContainer(); // Cookies
+
+                string respHtml;
+                // Create HttpWebResponse Object
+                using (HttpWebResponse resp = request.GetResponse() as HttpWebResponse)
+                {
+                    var encoding = GetCharacterSet(request, resp);
+                    using (var stream = resp.GetResponseStream())
+                    {
+                        using (StreamReader reader = new StreamReader(stream, encoding))
+                        {
+                            respHtml = reader.ReadToEnd();
+                        }
+
+                        // 如果是乱码则重新获取编码
+                        if (!string.IsNullOrEmpty(htmlStr) &&
+                    (!htmlStr.Trim().StartsWith("<!") || htmlStr.Contains("�")))
+                        {
+                            Match match = Regex.Match(respHtml, @"<meta.*charset=""?([\w-]+)""?.*>", RegexOptions.IgnoreCase);
+                            if (match.Success)
+                            {
+                                encoding = Encoding.GetEncoding(match.Groups[1].Value);
+                                using (StreamReader reader = new StreamReader(stream, encoding))
+                                {
+                                    respHtml = reader.ReadToEnd();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return respHtml;
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            return string.Empty;
+        }
+
+        private static Encoding GetCharacterSet(HttpWebRequest request, HttpWebResponse response)
+        {
+            var headers = response.Headers;
+            if (!headers.AllKeys.Any(key => key.Equals("Content-Type", StringComparison.OrdinalIgnoreCase)))
+            {
+                return FormateCharacterSet(response.CharacterSet);
             }
 
-            return respHtml;
+            var header = headers["Content-Type"];
+            var match = ContentCharsetRegex.Match(header);
+
+            if (!match.Success)
+                return FormateCharacterSet(response.CharacterSet);
+
+            var charset = match.Groups["value"].Value;
+
+            try
+            {
+                return Encoding.GetEncoding(charset);
+            }
+            catch (ArgumentException)
+            {
+                return FormateCharacterSet(response.CharacterSet);
+            }
+        }
+
+        private static Encoding FormateCharacterSet(string charset)
+        {
+            if (!string.IsNullOrEmpty(charset))
+            {
+                try
+                {
+                    return Encoding.GetEncoding(charset);
+                }
+                catch (ArgumentException)
+                {
+                    return Encoding.Default;
+                }
+            }
+            return Encoding.Default;
         }
 
         /// <summary>
